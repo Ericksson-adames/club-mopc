@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class pagos extends Model
 {
     //
+    protected $table = 'pagos';
+
+    protected $primaryKey = 'id';
+
+    public $timestamps = false;
+
+    //relacion con la tabla de reservas
+    public function reservas(){
+        return $this->belongsTo(reservas::class, 'id_reserva');
+    }
 }

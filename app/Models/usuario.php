@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 
 // clase para indicar que este sera mi usuario de autenticacion
-class Usuario extends Authenticatable implements FilamentUser
+class usuario extends Authenticatable implements FilamentUser
 {
     use Notifiable;
 
@@ -15,7 +15,7 @@ class Usuario extends Authenticatable implements FilamentUser
     protected $table = 'usuario';
 
      // indico a filament que esta es mi llave primaria en la base de datos 
-  //  protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
@@ -52,5 +52,20 @@ class Usuario extends Authenticatable implements FilamentUser
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
         return true;
+    }
+
+    //relacion con la tabla rol
+    public function rol(){
+        return $this->belongsTo(rol::class, 'id_rol');
+    }
+
+    //relacion con la tabla reservas
+    public function reservas(){
+        return $this->hasMany(reservas::class, 'id_usuario');
+    }
+
+    //relacion con la tabla historia_reservas
+    public function historia_reservas(){
+        return $this->hasMany(historial_reservas::class, 'id_usuario');
     }
 }
