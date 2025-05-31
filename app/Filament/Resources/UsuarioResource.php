@@ -21,6 +21,13 @@ class UsuarioResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    // funcion para organizar de forma desendente el registro de un nuevo usuario
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+        ->orderBy('id','desc');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -28,8 +35,8 @@ class UsuarioResource extends Resource
                 //
                 Forms\Components\TextInput::make ('nombre')
                          // funcion para que esten limpios los input cuando se cree un usuario nuevo 
-                ->required(fn (string $operation): bool => $operation === 'create' )
-                ->orderBy('nombre', 'desc'),
+                ->required(fn (string $operation): bool => $operation === 'create' ),
+               // ->orderBy('nombre', 'desc'),
                 Forms\Components\TextInput::make ('apellidos')
                          // funcion para que esten limpios los input cuando se cree un usuario nuevo 
                 ->required(fn (string $operation): bool => $operation === 'create' ),
@@ -79,39 +86,49 @@ class UsuarioResource extends Resource
                 ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('nombre')
+                ->label('Nombre')
                 ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('apellidos')
+                ->label('Apellidos')
                 ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                ->label('Correo')
                  ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('rol.nombre')
+                ->label('Rol')
                  ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_de_nacimiento')
+                ->label('Fecha de nacimiento')
                 ->dateTime()
                  ->sortable()
                 ->searchable(),
                 Tables\Columns\TextColumn::make('estado')
+                ->label('Estado')
                  ->sortable()
                 ->searchable(),
                  Tables\Columns\TextColumn::make('created_at')
+                 ->label('Creado')
                  ->dateTime()
                  ->sortable()
                 ->searchable(),
                  Tables\Columns\TextColumn::make('update_at')
+                 ->label('Actualizado')
                  ->dateTime()
                  ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
                 SelectFilter::make ('estado')
+                ->label('Estado')
                 ->options([
-                    'activo' =>'activo',
-                    'inactivo' =>'inactivo'
+                    'activo' =>'Activo',
+                    'inactivo' =>'Inactivo'
                 ])
             ])
             ->actions([

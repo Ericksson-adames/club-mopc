@@ -13,6 +13,14 @@ class espacio extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'capacidad',
+        'ubicacion',
+        'estado',
+    ];
+
     //relacion con la tabla reservas
  public function reservas(){
     return $this->hasMany(Reservas::class, 'id_espacio');

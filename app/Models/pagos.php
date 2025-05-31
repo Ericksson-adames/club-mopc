@@ -13,6 +13,14 @@ class pagos extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'monto',
+        'codigo',
+        'metodo_pago',
+        'estado',
+        'id_reserva',
+    ];
+
     //relacion con la tabla de reservas
     public function reservas(){
         return $this->belongsTo(reservas::class, 'id_reserva');
