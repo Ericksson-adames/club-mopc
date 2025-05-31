@@ -11,15 +11,20 @@ class solicitante extends Model
     protected $primaryKey = 'id_solicitante';
     public $timestamps = false;
 
-
+ protected $fillable = [
+    'nombre',
+    'apellido',
+    'numero_telefono',
+    'correo',
+    'empresa',
+    'departamento',
+    'extesion',
+    'telefono_empresa',
+    'numero_invitado'
+ ];
     //relacion con la tabla reservas
     public function reservas(){
     return $this->hasMany(reservas::class, 'id_solicitante');
-}
-
-//relacion con la tabla invitado
-public function invitados(){
-    return $this->hasMany(invitado::class, 'id_solicitante');
 }
 
 }

@@ -13,6 +13,10 @@ class carta extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'nombre',
+    ];
+
 
     //relacion con la tabla reservas
  public function reservas(){

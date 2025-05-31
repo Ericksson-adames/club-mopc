@@ -14,6 +14,16 @@ class reservas extends Model
 
  public $timestamps = false;
 
+ protected $fillable = [
+   'id_usuario',
+   'id_espacio',
+   'id_adicional',
+   'id_horario',
+   'id_solicitante',
+   'id_carta',
+   'estado',
+ ];
+
  //relacion con la hstorial_reservas
  public function historial_reservas(){
     return $this->hasMany(historial_reservas::class, 'id_reserva');

@@ -11,6 +11,12 @@ class horario extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    protected $fillable = [
+        'fecha',
+        'hora_inicio',
+        'hora_finalizar',
+    ];
+
     //relacion con la tabla reservas
  public function reservas(){
     return $this->hasMany(Reservas::class, 'id_horario');

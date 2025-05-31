@@ -6,6 +6,10 @@ use App\Filament\Resources\ReservasResource\Pages;
 use App\Filament\Resources\ReservasResource\RelationManagers;
 use App\Models\Reservas;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,12 +25,14 @@ class ReservasResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                //
-            ]);
+      return $form
+      ->schema([
+      //
+      
+      
+    ]);
+    
     }
-
     public static function table(Table $table): Table
     {
         return $table
