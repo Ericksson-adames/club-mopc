@@ -11,8 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class CreatePagos extends CreateRecord
 {
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
     protected static string $resource = PagosResource::class;
-
+    
+    //funcion para crear pagos 
     protected function handleRecordCreation(array $data): Model
     {
         try{
@@ -33,8 +38,8 @@ class CreatePagos extends CreateRecord
         dd('ERROR:'. $e->getMessage(), $e->getTraceAsString());
     }
     }
-    protected function getRedirectUrl(): string
-    {
-        return $this->getRedirectUrl():: getUrl('index');
-    }
+   /* public function canCreateAnother(): bool{
+        $data = $this->form->getState();
+        return isset($data['codigo_valido']) && $data['codigo_valido'] == true;
+    }*/
 }

@@ -5,8 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PagosResource\Pages;
 use App\Filament\Resources\PagosResource\RelationManagers;
 use App\Models\Pagos;
+use App\Models\pagos as ModelsPagos;
 use App\Models\reservas;
+use Closure;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,6 +24,12 @@ class PagosResource extends Resource
     protected static ?string $model = Pagos::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+        ->orderBy('id','desc');
+    }
 
     public static function form(Form $form): Form
     {
@@ -37,6 +46,23 @@ class PagosResource extends Resource
                 ->required()
                 ->label('Codigo de pago')
                 ->live()
+                //validando que el codigo de pago exista o sea correcto en la tabla reserva
+                ->rules([
+                  'required',
+                  'exists:reservas,codigo_pago',
+                ])
+                ->validationMessages([
+                   'codigo_pago.exists' => 'El código ingresado no es válido.',
+                ])
+                
+                /*->rules([
+                    fn (string $state): bool => reservas::where('codigo_pago', $state)->exists()
+                ])
+                ->validationMessages([
+                    'codigo_pago' => 'El código ingresado no es válido.',
+                ])*/
+
+                // funcion para validar las condiciones del codigo de pago introducido por el usuario
                 ->afterStateUpdated(function($state, callable $set){
                     $reserva = reservas::where('codigo_pago', $state)->first();
                     if($reserva){
@@ -90,7 +116,7 @@ class PagosResource extends Resource
                 ->searchable()
                 ->sortable()
                 ->label('Tipo'),
-                 Tables\Columns\TextColumn::make('create_at')
+                 Tables\Columns\TextColumn::make('created_at')
                 ->searchable()
                 ->dateTime()
                 ->sortable()
