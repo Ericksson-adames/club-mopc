@@ -6,6 +6,7 @@ use App\Filament\Resources\ReservasResource\Pages;
 use App\Filament\Resources\ReservasResource\RelationManagers;
 use App\Models\espacio;
 use App\Models\Reservas;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -26,6 +27,12 @@ class ReservasResource extends Resource
     protected static ?string $model = Reservas::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+      // funcion para organizar de forma desendente el registro de un nuevo usuario
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+        ->orderBy('id','desc');
+    }
 
     public static function form(Form $form): Form
       {
@@ -38,36 +45,87 @@ class ReservasResource extends Resource
                 Card::make('Espacio a reservar')->schema([
                 Select::make('espacio')
                 ->relationship('espacio', 'nombre')
+                ->required()
                 ])
             ]),
 
             // Paso 2: Solicitante
             Step::make('Solicitante')
                 ->schema([
-                    Card::make('Datos Personal')->schema([
-                        TextInput::make('nombre'),
-                        TextInput::make('apellido'),
-                        TextInput::make('numero_telefono')->tel(),
-                        TextInput::make('correo')->email(),
+                    Card::make('Datos Personal')
+                    ->schema([
+                        TextInput::make('nombre')
+                        ->required()
+                        ->label('Nombre'),
+                        TextInput::make('apellido')
+                         ->required()
+                        ->label('Apellidos'),
+                        TextInput::make('numero_telefono')
+                        ->tel()
+                         ->required()
+                        ->label('Telefono'),
+                        TextInput::make('correo')
+                        ->email()
+                         ->required()
+                        ->label('Correo'),
                     ])->columns(2),
+
+                    Select::make('tiene_empresa')
+                    ->label('¿Pertenece a una empresa?')
+                    ->options([
+                        'si' => 'Si',
+                        'no' => 'No',
+                    ])
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                     if ($state === 'no') {
+                     $set('empresa', null);
+                     $set('departamento', null);
+                     $set('telefono_empresa', null);
+                     $set('extesion', null);
+                     }
+                  }),
+
                     Card::make('Imformacion de la empresa')->schema([
-                        TextInput::make('empresa'),
-                        TextInput::make('departamento'),
-                        TextInput::make('extesion'),
-                        TextInput::make('telefono_empresa')->tel(),
-                    ])->columns(2),
+                        TextInput::make('empresa')
+                         ->required()
+                        ->label('Nombre de la empresa'),
+                        TextInput::make('departamento')
+                         ->required()
+                        ->label('Departamento'),
+                        TextInput::make('telefono_empresa')
+                        ->tel()
+                         ->required()
+                        ->label('Telefono de la empresa'),
+                        TextInput::make('extesion')
+                         ->required()
+                        ->label('Extension'),
+                    ])
+                    ->columns(2)
+                    ->visible(fn ($get) => $get('tiene_empresa') === 'si'),
+
                     Card::make('Invitados')->schema([
-                        TextInput::make('numero_invitado')->numeric(),
-                    ])->columns(2),
+                        TextInput::make('numero_invitado')
+                        ->numeric()
+                        ->label('Numero de invitados')
+                        ->required(),
+                    ])
+                     ->columns(2),
                 ]),
 
             // Paso 3: Horario
             Step::make('Horario')
                 ->schema([
                     Card::make()->schema([
-                        DatePicker::make('fecha'),
-                        TimePicker::make('hora_inicio'),
-                        TimePicker::make('hora_finalizar'),
+                        DatePicker::make('fecha')
+                         ->required()
+                        ->label('Fecha de la reunion'),
+                        TimePicker::make('hora_inicio')
+                         ->required()
+                        ->label('Hora de inicio'),
+                        TimePicker::make('hora_finalizar')
+                         ->required()
+                        ->label('Hora de finalizar'),
                     ])->columns(2),
                 ]),
 
@@ -101,7 +159,9 @@ class ReservasResource extends Resource
                                 $set('sillas', 0);
                                 $set('mesas', 0);
                             }
-                        }),
+                        })
+                         ->required()
+                        ->label('Selecionar utilidades'),
                         TextInput::make('sillas')
                         //hace visible el campo segun la opcion seleccionada en utilidades
                         ->visible(fn($get) => in_array($get('utilidades'), ['sillas' , 'ambos']) )
@@ -112,7 +172,10 @@ class ReservasResource extends Resource
                             $mesas = $get ('mesas') ?? 0;
                             $set('total_utilidades', $sillas + $mesas);
                         })
-                        ->numeric(),
+                        ->numeric()
+                         ->required()
+                        ->label('Numero de sillas'),
+
                         TextInput::make('mesas')
                         //hace visible el campo segun la opcion seleccionada en utilidades
                         ->visible(fn($get) => in_array($get('utilidades'), ['mesas' , 'ambos']) )
@@ -123,22 +186,26 @@ class ReservasResource extends Resource
                             $sillas = $get ('sillas') ?? 0;
                             $set('total_utilidades', $sillas + $mesas);
                         })
-                        ->numeric(),
+                        ->numeric()
+                         ->required()
+                        ->label('Numero de mesas'),
+
                         TextInput::make('total_utilidades')
                         ->readOnly()
                         ->dehydrated(true)
                         ->live()
-                        ->numeric(),
+                        ->numeric()
+                        ->label('Total de utilidades'),
                     ])->columns(2),
                 ]),
 
-               // Paso 5: Adicional
+               /* Paso 5: Adicional
               Step::make('Carta')
                 ->schema([
                     Card::make()->schema([
                         TextInput::make('nombre_pdf'),
                     ]),
-                ]),    
+                ]), */   
 
         ])->columnSpanFull(),
     ]);

@@ -8,11 +8,13 @@ use App\Models\carta;
 use App\Models\horario;
 use App\Models\reservas;
 use App\Models\solicitante;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class CreateReservas extends CreateRecord
 {
@@ -64,12 +66,24 @@ class CreateReservas extends CreateRecord
             'total_utilidades' => $data['total_utilidades'] ?? 0,
         ]);
 
-        // 4. Crear carta
-        $carta = carta::create([
-            'nombre_pdf' => $data['nombre_pdf'],
-        ]);
+        // 4. Concatenar nombre + apellido para la carta
+    $nombreCompleto = $solicitante->nombre . ' ' . $solicitante->apellido;
 
-        // 5. Finalmente, crear la reserva usando los IDs de los anteriores
+    // 5. Generar PDF
+    $nombreArchivo = 'carta_' . Str::slug($nombreCompleto) . '_' . time() . '.pdf';
+
+    $pdf = Pdf::loadView('cartas.carta_reserva', [
+        'nombre' => $nombreCompleto,
+    ]);
+
+    $pdf->save(storage_path('app/public/cartas/' . $nombreArchivo));
+
+    // 6. Guardar carta
+    $carta = Carta::create([
+        'nombre_pdf' => $nombreArchivo,
+    ]);
+
+        // 7. Finalmente, crear la reserva usando los IDs de los anteriores
         $reserva = reservas::create([
             'id_usuario' => Auth::id(),
             'id_espacio' => $data['espacio'], //->relationship('espacio', 'nombre')

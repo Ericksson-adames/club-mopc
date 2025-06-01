@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PagosResource\Pages;
 use App\Filament\Resources\PagosResource\RelationManagers;
 use App\Models\Pagos;
+use App\Models\reservas;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -28,14 +29,34 @@ class PagosResource extends Resource
                 //
                 Forms\Components\TextInput::make('monto')
                 ->numeric()
+                ->label('Monto a pagar')
                 ->prefix('$')
                 ->rules(['numeric', 'min:0'])
                 ->required(),
                  Forms\Components\TextInput::make('codigo_pago')
-                ->required(),
-                 Forms\Components\TextInput::make('id_reserva')
+                ->required()
+                ->label('Codigo de pago')
+                ->live()
+                ->afterStateUpdated(function($state, callable $set){
+                    $reserva = reservas::where('codigo_pago', $state)->first();
+                    if($reserva){
+                        $set('id_reserva', $reserva->id);
+                        $set('prefijo', $reserva->prefijo);
+                    }else{
+                        $set('id_reserva', null);
+                        $set('prefijo', 'Codigo Invalido');
+                    }
+                }),
+
+                Forms\Components\TextInput::make('prefijo')
+                ->label('ID reserva')
+                ->live()
+                ->disabled()
+                ->dehydrated(false),
+                 Forms\Components\Hidden::make('id_reserva')
                 ->required(),
                  Forms\Components\Select::make('metodo_pago')
+                 ->label('Tipo de pago')
                  ->options([
                     'efectivo' => 'Efectivo',
                     'tarjeta' => 'Tarjeta',
@@ -45,9 +66,8 @@ class PagosResource extends Resource
                  Forms\Components\Select::make('estado')
                  ->visibleOn('edit')
                  ->options([
-                    'pendiente' => 'Pendiente',
                     'pago' => 'Pago',
-                    'impago' => 'Impago',
+                    'devolucion' => 'Devolucion',
                  ])
                 ->required(),
             ]);

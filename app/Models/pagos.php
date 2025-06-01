@@ -15,7 +15,7 @@ class pagos extends Model
 
     protected $fillable = [
         'monto',
-        'codigo',
+        'codigo_pago',
         'metodo_pago',
         'estado',
         'id_reserva',
