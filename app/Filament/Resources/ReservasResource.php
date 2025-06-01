@@ -125,7 +125,8 @@ class ReservasResource extends Resource
                         })
                         ->numeric(),
                         TextInput::make('total_utilidades')
-                        ->disabled()
+                        ->readOnly()
+                        ->dehydrated(true)
                         ->live()
                         ->numeric(),
                     ])->columns(2),
@@ -147,6 +148,35 @@ class ReservasResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('prefijo')
+                ->toggleable()
+                ->searchable()
+                ->label('ID'),
+                Tables\Columns\TextColumn::make('espacio.nombre')
+                ->toggleable()
+                ->searchable()
+                ->label('Espacio'),
+                Tables\Columns\TextColumn::make('usuario.nombre')
+                ->toggleable()
+                ->searchable()
+                ->label('Usuario'),
+                 Tables\Columns\TextColumn::make('solicitante.nombre')
+                ->toggleable()
+                ->searchable()
+                ->label('Solicitante'),
+                 Tables\Columns\TextColumn::make('horario.fecha')
+                ->toggleable()
+                ->searchable()
+                ->label('Fecha'),
+                 Tables\Columns\BadgeColumn::make('estado')
+                ->toggleable()
+                ->searchable()
+                ->colors([
+                    'pendiente' => 'warning',
+                    'aprobado' => 'success',
+                    'rechazado' => 'danger',
+                ])
+                ->label('Estado'),
             ])
             ->filters([
                 //

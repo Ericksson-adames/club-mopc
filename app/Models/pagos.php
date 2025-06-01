@@ -23,6 +23,6 @@ class pagos extends Model
 
     //relacion con la tabla de reservas
     public function reservas(){
-        return $this->belongsTo(reservas::class, 'id_reserva');
+        return $this->belongsTo(reservas::class, 'id');
     }
 }

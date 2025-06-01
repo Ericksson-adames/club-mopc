@@ -14,7 +14,7 @@ class carta extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre',
+        'nombre_pdf',
     ];
 
 

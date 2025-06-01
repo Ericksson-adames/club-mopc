@@ -22,7 +22,7 @@ class reservas extends Model
    'id_solicitante',
    'id_carta',
    'estado',
-   'numero_invitado',
+   'numero_invitado'
  ];
 
  //relacion con la hstorial_reservas
@@ -36,32 +36,32 @@ class reservas extends Model
  }
 
  //relacion con la tabla usuarios
- public function usuarios(){
-    return $this->belongsTo (usuario::class, 'id');
+ public function usuario(){
+    return $this->belongsTo (usuario::class, 'id_usuario');
  }
 
  //relacion con la tabla espacio
  public function espacio(){
-    return $this->belongsTo(espacio::class, 'id');
+    return $this->belongsTo(espacio::class, 'id_espacio');
  }
 
  //relacion con la tabla adicional
- public function adicionales(){
-    return $this->belongsTo(adicional::class, 'id');
+ public function adicional(){
+    return $this->belongsTo(adicional::class, 'id_adicional');
  }
 
  //relacion con la tabla horario
  public function horario(){
-    return $this->belongsTo(horario::class, 'id');
+    return $this->belongsTo(horario::class, 'id_horario');
  }
 
  //relacion con la tabla solicitante
  public function solicitante(){
-    return $this->belongsTo(solicitante::class, 'id');
+    return $this->belongsTo(solicitante::class, 'id_solicitante');
  }
 
  //relacion con la tabla carta
  public function carta(){
-    return $this->belongsTo(carta::class, 'id');
+    return $this->belongsTo(carta::class, 'id_carta');
  }
 }
