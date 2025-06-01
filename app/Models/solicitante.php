@@ -8,7 +8,7 @@ class solicitante extends Model
 {
     //
     protected $table = 'solicitante';
-    protected $primaryKey = 'id_solicitante';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
  protected $fillable = [
@@ -20,7 +20,6 @@ class solicitante extends Model
     'departamento',
     'extesion',
     'telefono_empresa',
-    'numero_invitado'
  ];
     //relacion con la tabla reservas
     public function reservas(){
