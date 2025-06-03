@@ -47,7 +47,7 @@ class PagosResource extends Resource
                 ->label('Codigo de pago')
                 ->live()
                 //validando que el codigo de pago exista o sea correcto en la tabla reserva
-                ->rules([
+                /*->rules([
                   'required',
                   'exists:reservas,codigo_pago',
                 ])
