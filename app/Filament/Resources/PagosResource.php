@@ -93,7 +93,7 @@ class PagosResource extends Resource
                  ->visibleOn('edit')
                  ->options([
                     'pago' => 'Pago',
-                    'devolucion' => 'Devolucion',
+                    'reembolso' => 'Reembolso',
                  ])
                 ->required(),
             ]);
@@ -137,7 +137,7 @@ class PagosResource extends Resource
                 SelectFilter::make('estado')
                 ->options([
                     'pago' => 'Pago',
-                    'impago' => 'Impago',
+                    'reembolso' => 'Reembolso',
                 ])
             ])
             ->actions([
@@ -145,7 +145,7 @@ class PagosResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

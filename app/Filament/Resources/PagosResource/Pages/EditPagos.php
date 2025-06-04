@@ -12,7 +12,7 @@ class EditPagos extends EditRecord
 
     protected function getRedirectUrl(): ?string
     {
-        return $this->getRedirectUrl():: getUrl('index');
+        return $this->getResource():: getUrl('index');
     }
 
     /*protected function getHeaderActions(): array

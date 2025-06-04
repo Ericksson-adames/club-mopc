@@ -46,8 +46,21 @@ class ReservasResource extends Resource
                 Select::make('espacio')
                 ->relationship('espacio', 'nombre')
                 ->required()
-                ])
-            ]),
+                ]),
+            
+        Card::make('Espacio a reservar')->schema([
+            Select::make('estado')
+            ->options([
+                'pendiente' => 'Pendiente',
+                'aprobado' => 'Aprobado',
+                'rechazado' => 'Rechazado',
+                'cancelado' => 'Cancelado',
+            ])
+            ->label('Estado')
+            ->visibleOn('edit')
+            ->required()
+        ]),
+        ])->visible(fn ()=>true),
 
             // Paso 2: Solicitante
             Step::make('Solicitante')
@@ -111,7 +124,7 @@ class ReservasResource extends Resource
                         ->required(),
                     ])
                      ->columns(2),
-                ]),
+                ])->visible(fn ()=>true),
 
             // Paso 3: Horario
             Step::make('Horario')
@@ -127,7 +140,7 @@ class ReservasResource extends Resource
                          ->required()
                         ->label('Hora de finalizar'),
                     ])->columns(2),
-                ]),
+                ])->visible(fn ()=>true),
 
             // Paso 4: Adicional
             Step::make('Adicional')
@@ -197,9 +210,9 @@ class ReservasResource extends Resource
                         ->numeric()
                         ->label('Total de utilidades'),
                     ])->columns(2),
-                ]),
+                ])->visible(fn ()=>true),
 
-               /* Paso 5: Adicional
+               /* Paso 5: crta
               Step::make('Carta')
                 ->schema([
                     Card::make()->schema([
@@ -253,7 +266,7 @@ class ReservasResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
