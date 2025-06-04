@@ -48,7 +48,8 @@ class ReservasResource extends Resource
                 ->required()
                 ]),
             
-        Card::make('Espacio a reservar')->schema([
+        Card::make(' Estado de reservar')->visibleOn('edit')
+        ->schema([
             Select::make('estado')
             ->options([
                 'pendiente' => 'Pendiente',
@@ -69,26 +70,35 @@ class ReservasResource extends Resource
                     ->schema([
                         TextInput::make('nombre')
                         ->required()
+                         ->placeholder('Nombre del solicitante')
                         ->label('Nombre'),
                         TextInput::make('apellido')
                          ->required()
+                          ->placeholder('Apellidos del solicitante')
                         ->label('Apellidos'),
                         TextInput::make('numero_telefono')
                         ->tel()
+                        ->numeric()
+                        ->maxlength(10)
+                        ->minlength(10)
+                        ->placeholder('Sin guiones (-). Ej: 8094986864')
                          ->required()
                         ->label('Telefono'),
                         TextInput::make('correo')
                         ->email()
                          ->required()
+                          ->placeholder('Email del solicitante')
                         ->label('Correo'),
                     ])->columns(2),
 
                     Select::make('tiene_empresa')
                     ->label('¿Pertenece a una empresa?')
+                    ->required()
                     ->options([
                         'si' => 'Si',
                         'no' => 'No',
                     ])
+                    ->visibleOn('create')
                     ->reactive()
                     ->afterStateUpdated(function ($state, callable $set) {
                      if ($state === 'no') {
@@ -102,16 +112,26 @@ class ReservasResource extends Resource
                     Card::make('Imformacion de la empresa')->schema([
                         TextInput::make('empresa')
                          ->required()
+                          ->placeholder('Nombre de la empresa perteneciente')
                         ->label('Nombre de la empresa'),
                         TextInput::make('departamento')
                          ->required()
+                          ->placeholder('Departamento al que pertenece')
                         ->label('Departamento'),
                         TextInput::make('telefono_empresa')
                         ->tel()
+                         ->placeholder('Sin guiones (-). Ej: 8094986864')
+                        ->numeric()
+                        ->maxlength(10)
+                        ->minlength(10)
                          ->required()
                         ->label('Telefono de la empresa'),
                         TextInput::make('extesion')
                          ->required()
+                         ->numeric()
+                          ->placeholder('Extension del departamento')
+                         ->maxlength(4)
+                         ->minlength(4)
                         ->label('Extension'),
                     ])
                     ->columns(2)
@@ -120,6 +140,7 @@ class ReservasResource extends Resource
                     Card::make('Invitados')->schema([
                         TextInput::make('numero_invitado')
                         ->numeric()
+                         ->placeholder('Numero de invitados')
                         ->label('Numero de invitados')
                         ->required(),
                     ])
@@ -132,6 +153,7 @@ class ReservasResource extends Resource
                     Card::make()->schema([
                         DatePicker::make('fecha')
                          ->required()
+                          ->placeholder('Fecha de la reserva')
                         ->label('Fecha de la reunion'),
                         TimePicker::make('hora_inicio')
                          ->required()
@@ -179,6 +201,7 @@ class ReservasResource extends Resource
                         //hace visible el campo segun la opcion seleccionada en utilidades
                         ->visible(fn($get) => in_array($get('utilidades'), ['sillas' , 'ambos']) )
                         ->live()
+                         ->placeholder('Cantidad de sillas')
                         //funcion para calcular el total de utilidades
                         ->afterStateUpdated(function($state, callable $set, callable $get) {
                             $sillas = $state ?? 0;
@@ -193,6 +216,7 @@ class ReservasResource extends Resource
                         //hace visible el campo segun la opcion seleccionada en utilidades
                         ->visible(fn($get) => in_array($get('utilidades'), ['mesas' , 'ambos']) )
                           ->live()
+                           ->placeholder('Cantidad de mesas')
                            //funcion para calcular el total de utilidades
                         ->afterStateUpdated(function($state, callable $set, callable $get) {
                             $mesas = $state ?? 0;
@@ -252,9 +276,10 @@ class ReservasResource extends Resource
                 ->toggleable()
                 ->searchable()
                 ->colors([
-                    'pendiente' => 'warning',
-                    'aprobado' => 'success',
-                    'rechazado' => 'danger',
+                    'warning' => 'pendiente',
+                    'success' => 'aprobado',
+                    'danger' => 'rechazado',
+                    'gray' => 'cancelado', 
                 ])
                 ->label('Estado'),
             ])

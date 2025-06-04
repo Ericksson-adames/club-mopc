@@ -127,8 +127,12 @@ class PagosResource extends Resource
                 ->sortable()
                 ->label('Actualizado')
                 ->toggleable(isToggledHiddenByDefault: true),
-                 Tables\Columns\TextColumn::make('estado')
+                 Tables\Columns\BadgeColumn::make('estado')
                 ->searchable()
+                ->colors([
+                    'success' => 'pago',
+                    'danger' => 'reembolso',
+                ])
                 ->sortable()
                 ->label('Estado')
             ])

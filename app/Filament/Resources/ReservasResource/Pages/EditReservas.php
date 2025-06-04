@@ -36,12 +36,12 @@ class EditReservas extends EditRecord
         $data['apellido'] = $solicitante->apellido;
         $data['numero_telefono'] = $solicitante->numero_telefono;
         $data['correo'] = $solicitante->correo;
-        //$data['tiene_empresa'] = $solicitante->tiene_empresa;
+        /*$data['tiene_empresa'] = $solicitante->tiene_empresa;
         $data['empresa'] = $solicitante->empresa;
         $data['departamento'] = $solicitante->departamento;
         $data['telefono_empresa'] = $solicitante->telefono_empresa;
         $data['extesion'] = $solicitante->extesion;
-        //$data['numero_invitado'] = $solicitante->numero_invitado;
+        //$data['numero_invitado'] = $solicitante->numero_invitado;*/
     }
 
     if ($horario) {
@@ -70,12 +70,12 @@ protected function afterSave(): void
         'apellido' => $data['apellido'],
         'numero_telefono' => $data['numero_telefono'],
         'correo' => $data['correo'],
-        'tiene_empresa' => $data['tiene_empresa'],
+        /*'tiene_empresa' => $data['tiene_empresa'],
         'empresa' => $data['empresa'],
         'departamento' => $data['departamento'],
         'telefono_empresa' => $data['telefono_empresa'],
-        'extesion' => $data['extesion'],
-        'numero_invitado' => $data['numero_invitado'],
+        'extesion' => $data['extesion'],*/
+        //'numero_invitado' => $data['numero_invitado'],
     ]);
 
 
@@ -90,13 +90,13 @@ protected function afterSave(): void
 
     $this->record->adicional()->updateOrCreate([], [
         'utilidades' => $data['utilidades'],
-        'sillas' => $data['sillas'],
-        'mesas' => $data['mesas'],
+        'sillas' => $data['sillas'] ?? 0,
+        'mesas' => $data['mesas'] ?? 0,
         'total_utilidades' => $data['total_utilidades'],
     ]);
 }
  
-// funcion para eliminar los datos de las otras tablas (opcional)
+// funcion para eliminar los datos de las otras tablas porque pertenecen a otras tablas diferente a la tabla reservas (opcional)
 protected function mutateFormDataBeforeSave(array $data): array
 {
     unset(
@@ -104,12 +104,12 @@ protected function mutateFormDataBeforeSave(array $data): array
         $data['apellido'],
         $data['numero_telefono'],
         $data['correo'],
-        $data['tiene_empresa'],
+       /* $data['tiene_empresa'],
         $data['empresa'],
         $data['departamento'],
         $data['telefono_empresa'],
         $data['extesion'],
-        $data['numero_invitado'],
+        //$data['numero_invitado'],*/
         $data['fecha'],
         $data['hora_inicio'],
         $data['hora_finalizar'],
