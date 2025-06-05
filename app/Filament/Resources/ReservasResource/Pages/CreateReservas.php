@@ -41,10 +41,10 @@ class CreateReservas extends CreateRecord
             'apellido' => $data['apellido'],
             'numero_telefono' => $data['numero_telefono'],
             'correo' => $data['correo'],
-            'empresa' => $data['empresa'],
-            'departamento' => $data['departamento'],
-            'extesion' => $data['extesion'],
-            'telefono_empresa' => $data['telefono_empresa'],
+            'empresa' => $data['empresa']?? 'no',
+            'departamento' => $data['departamento']?? 'no',
+            'extesion' => $data['extesion'] ?? '0000',
+            'telefono_empresa' => $data['telefono_empresa'] ?? '0000000000',
         ]);
 
         // 2. Crear el horario
@@ -92,6 +92,7 @@ class CreateReservas extends CreateRecord
             'id_adicional' => $adicional->id,
             'id_carta' => $carta->id,
             'numero_invitado' => $data['numero_invitado'],
+            'tipo_actividad' => $data['tipo_actividad'],
             'estado' => 'pendiente', // opcional(en la BD ya esta definido por defaul)
 
         ]);

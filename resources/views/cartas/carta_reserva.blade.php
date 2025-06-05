@@ -15,7 +15,7 @@
 
     <p style="text-align: right;">{{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
 
-    <p>Sr. Ministro:</p>
+    <p>Lic. Elio Amparo:</p>
 
     <p>
         Por medio de la presente, me dirijo a usted para solicitar la reserva del espacio requerido para llevar a cabo una actividad institucional programada. 

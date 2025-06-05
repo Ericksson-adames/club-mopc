@@ -106,9 +106,13 @@ class UsuarioResource extends Resource
                 ->dateTime()
                  ->sortable()
                 ->searchable(),
-                Tables\Columns\TextColumn::make('estado')
+                Tables\Columns\BadgeColumn::make('estado')
                 ->label('Estado')
                  ->sortable()
+                 ->colors([
+                    'danger' => 'inactivo',
+                    'success' => 'activo'
+                 ])
                 ->searchable(),
                  Tables\Columns\TextColumn::make('created_at')
                  ->label('Creado')

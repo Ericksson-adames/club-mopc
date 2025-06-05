@@ -102,24 +102,27 @@ class ReservasResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(function ($state, callable $set) {
                      if ($state === 'no') {
-                     $set('empresa', null);
-                     $set('departamento', null);
-                     $set('telefono_empresa', null);
-                     $set('extesion', null);
+                     $set('empresa', 'no');
+                     $set('departamento', 'no');
+                     $set('telefono_empresa', '0000000000');
+                     $set('extesion', '0000');
                      }
                   }),
 
                     Card::make('Imformacion de la empresa')->schema([
                         TextInput::make('empresa')
                          ->required()
+                         ->dehydrated()
                           ->placeholder('Nombre de la empresa perteneciente')
                         ->label('Nombre de la empresa'),
                         TextInput::make('departamento')
                          ->required()
+                         ->dehydrated()
                           ->placeholder('Departamento al que pertenece')
                         ->label('Departamento'),
                         TextInput::make('telefono_empresa')
                         ->tel()
+                        ->dehydrated()
                          ->placeholder('Sin guiones (-). Ej: 8094986864')
                         ->numeric()
                         ->maxlength(10)
@@ -129,6 +132,7 @@ class ReservasResource extends Resource
                         TextInput::make('extesion')
                          ->required()
                          ->numeric()
+                         ->dehydrated()
                           ->placeholder('Extension del departamento')
                          ->maxlength(4)
                          ->minlength(4)
@@ -142,6 +146,10 @@ class ReservasResource extends Resource
                         ->numeric()
                          ->placeholder('Numero de invitados')
                         ->label('Numero de invitados')
+                        ->required(),
+                         TextInput::make('tipo_actividad')
+                         ->placeholder('Que tipo de actividad se realizará')
+                        ->label('Tipo de actividad')
                         ->required(),
                     ])
                      ->columns(2),

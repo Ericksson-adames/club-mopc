@@ -22,7 +22,8 @@ class reservas extends Model
    'id_solicitante',
    'id_carta',
    'estado',
-   'numero_invitado'
+   'numero_invitado',
+   'tipo_actividad'
  ];
 
  //relacion con la hstorial_reservas
