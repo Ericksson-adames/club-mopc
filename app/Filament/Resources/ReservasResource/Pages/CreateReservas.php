@@ -100,8 +100,10 @@ class CreateReservas extends CreateRecord
 
         $reserva->refresh();
 
-          // -------------------- GENERAR RECIBO --------------------
-         $reserva->load([
+          
+        // -------------------- GENERAR RECIBO --------------------
+        //relacion para el recibo de la reserva 
+        $reserva->load([
          'usuario',
          'espacio',
          'horario',
@@ -109,13 +111,16 @@ class CreateReservas extends CreateRecord
          'solicitante',
        ]);
 
-        $reciboNombreArchivo = 'recibo_' . Str::slug($nombreCompleto) . '_' . time() . '.pdf';
+       //genera el pdf
+       $reciboNombreArchivo = 'recibo_' . Str::slug($nombreCompleto) . '_' . time() . '.pdf';
 
-        $pdf = Pdf::loadView('reservas.reservas', [
+       //aqui se guarda el html del recibo
+       $pdf = Pdf::loadView('reservas.reservas', [
          'reserva' => $reserva
        ]);
 
-        $pdf->save(storage_path('app/public/recibos/' . $reciboNombreArchivo));
+       //aqui se guarda el archivo del recibo
+       $pdf->save(storage_path('app/public/recibos/' . $reciboNombreArchivo));
 
         return $reserva;
     }
