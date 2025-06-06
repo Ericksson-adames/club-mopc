@@ -262,26 +262,38 @@ class ReservasResource extends Resource
                 //
                 Tables\Columns\TextColumn::make('prefijo')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->label('ID'),
                 Tables\Columns\TextColumn::make('espacio.nombre')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->label('Espacio'),
                 Tables\Columns\TextColumn::make('usuario.nombre')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->label('Usuario'),
                  Tables\Columns\TextColumn::make('solicitante.nombre')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->label('Solicitante'),
                  Tables\Columns\TextColumn::make('horario.fecha')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->label('Fecha'),
                  Tables\Columns\BadgeColumn::make('estado')
                 ->toggleable()
+                ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                ->openUrlInNewTab(false)
                 ->searchable()
                 ->colors([
                     'warning' => 'pendiente',
@@ -295,7 +307,9 @@ class ReservasResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+               Tables\Actions\EditAction::make()
+               ->url(fn ($record) => route('filament.admin.resources.reservas.edit', ['record' => $record])),
+                //Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -317,6 +331,7 @@ class ReservasResource extends Resource
             'index' => Pages\ListReservas::route('/'),
             'create' => Pages\CreateReservas::route('/create'),
             'edit' => Pages\EditReservas::route('/{record}/edit'),
+            'view' => Pages\ViewReserva::route('/{record}'),
         ];
     }
 }
