@@ -12,7 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -82,6 +82,7 @@ class CreateReservas extends CreateRecord
     $carta = Carta::create([
         'nombre_pdf' => $nombreArchivo,
     ]);
+  
 
         // 7. Finalmente, crear la reserva usando los IDs de los anteriores
         $reserva = reservas::create([
@@ -97,8 +98,27 @@ class CreateReservas extends CreateRecord
 
         ]);
 
+        $reserva->refresh();
+
+          // -------------------- GENERAR RECIBO --------------------
+         $reserva->load([
+         'usuario',
+         'espacio',
+         'horario',
+         'adicional',
+         'solicitante',
+       ]);
+
+        $reciboNombreArchivo = 'recibo_' . Str::slug($nombreCompleto) . '_' . time() . '.pdf';
+
+        $pdf = Pdf::loadView('reservas.reservas', [
+         'reserva' => $reserva
+       ]);
+
+        $pdf->save(storage_path('app/public/recibos/' . $reciboNombreArchivo));
+
         return $reserva;
-}
+    }
 
 protected function getRedirectUrl(): string
 {
