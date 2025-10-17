@@ -138,11 +138,11 @@ class PagosResource extends Resource
             ])
             ->filters([
                 //
-                SelectFilter::make('estado')
+                /*SelectFilter::make('estado')
                 ->options([
                     'pago' => 'Pago',
                     'reembolso' => 'Reembolso',
-                ])
+                ])*/
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
