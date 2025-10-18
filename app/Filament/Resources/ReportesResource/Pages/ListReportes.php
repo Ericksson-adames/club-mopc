@@ -25,6 +25,8 @@ class ListReportes extends ListRecords
     {
         return [
             \App\Filament\Widgets\reservasWidget::class,
+            \App\Filament\Widgets\graficoWigets::class,
+            \App\Filament\Widgets\clienteWigets::class,
         ];
     }
 

@@ -55,11 +55,45 @@ class reservasWidget extends BaseWidget
         $ensure = fn(array $s) => count($s) >= 2 ? $s : [0, 0];
 
         return [
-            Stat::make('Aprobadas', $aprobadas)->color('success')->chart($ensure($apSeries)),
-            Stat::make('Pendientes', $pendientes)->color('warning')->chart($ensure($peSeries)),
-            Stat::make('Canceladas', $canceladas)->color('gray')->chart($ensure($caSeries)),
-            Stat::make('Rechazadas', $rechazadas)->color('danger')->chart($ensure($reSeries)),
-            Stat::make('Total de Reservas', $total)->color('primary')->chart($ensure($totalSeries)),
+            Stat::make('Aprobadas', $aprobadas)
+            ->color('success')
+            ->chart($ensure($apSeries))
+            ->icon('heroicon-o-check-circle')
+            ->description('Reservas aprobadas')
+            ->descriptionIcon('heroicon-m-arrow-trending-up')
+            ->descriptionColor('success')
+            ->color('success'),
+            Stat::make('Pendientes', $pendientes)
+            ->color('warning')
+            ->chart($ensure($peSeries))
+            ->icon('heroicon-o-clock')
+            ->description('Reservas pendientes')
+            ->descriptionIcon('heroicon-m-arrow-trending-up')
+            ->descriptionColor('warning')
+            ->color('warning'),
+            Stat::make('Canceladas', $canceladas)
+            ->color('gray')
+            ->chart($ensure($caSeries))
+            ->icon('heroicon-o-x-circle')
+            ->description('Reservas canceladas')
+            ->descriptionIcon('heroicon-m-arrow-trending-down')
+            ->color('gray'),
+            Stat::make('Rechazadas', $rechazadas)
+            ->color('danger')
+            ->chart($ensure($reSeries))
+            ->icon('heroicon-o-no-symbol')
+            ->description('Reservas rechazadas')
+            ->descriptionIcon('heroicon-m-arrow-trending-down')
+            ->descriptionColor('danger')
+            ->color('danger'),
+            Stat::make('Total de Reservas', $total)
+            ->color('primary')
+            ->chart($ensure($totalSeries))
+            ->icon('heroicon-o-chart-bar')
+            ->description('Total de reservas')
+            ->descriptionIcon('heroicon-m-arrow-trending-up')
+            ->descriptionColor('primary')
+            ->color('primary'),
         ];
     }
 

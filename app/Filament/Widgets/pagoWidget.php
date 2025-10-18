@@ -11,9 +11,23 @@ class pagoWidget extends BaseWidget
     {
         return [
             //
-            Stat::make('Total de pagos', $this->getPagos()),
-            Stat::make('Total de reembolso', $this->getReembolso()),
-            Stat::make('Monto total', $this->getMontoTotal()),
+            Stat::make('Pagos', $this->getPagos())
+            ->icon('heroicon-o-credit-card')
+            ->description('Total de pagos')
+            ->descriptionIcon('heroicon-m-arrow-trending-up')
+            ->color('primary'),
+            
+            Stat::make('Reembolso', $this->getReembolso())
+            ->icon('heroicon-c-receipt-refund')
+            ->description('Total de reembolsos')
+            ->descriptionIcon('heroicon-m-arrow-trending-down')
+            ->color('danger'),
+
+            Stat::make('Monto total', $this->getMontoTotal())
+            ->icon('heroicon-o-currency-dollar')
+            ->description('Total de pagos')
+            ->descriptionIcon('heroicon-m-arrow-trending-up')
+            ->color('success'),
         ];
     }
 
@@ -29,5 +43,8 @@ class pagoWidget extends BaseWidget
     protected function getMontoTotal()
     {
         return \App\Models\Pagos::where('estado', 'pago')->sum('monto');
+        
     }
+
+    
 }
