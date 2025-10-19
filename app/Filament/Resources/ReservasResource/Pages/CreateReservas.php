@@ -3,17 +3,20 @@
 namespace App\Filament\Resources\ReservasResource\Pages;
 
 use App\Filament\Resources\ReservasResource;
+use App\Mail\cartaReserva;
 use App\Models\adicional;
 use App\Models\carta;
 use App\Models\horario;
 use App\Models\reservas;
 use App\Models\solicitante;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class CreateReservas extends CreateRecord
@@ -82,6 +85,9 @@ class CreateReservas extends CreateRecord
     $carta = Carta::create([
         'nombre_pdf' => $nombreArchivo,
     ]);
+    $destinatario = 'ericksonadamesabreu@gmail.com'; // <-- cámbialo
+Mail::to($destinatario)
+    ->send(new cartaReserva($nombreCompleto, $pdf));
   
 
         // 7. Finalmente, crear la reserva usando los IDs de los anteriores
@@ -95,6 +101,7 @@ class CreateReservas extends CreateRecord
             'numero_invitado' => $data['numero_invitado'],
             'tipo_actividad' => $data['tipo_actividad'],
             'estado' => 'pendiente', // opcional(en la BD ya esta definido por defaul)
+            
 
         ]);
 
@@ -129,4 +136,5 @@ protected function getRedirectUrl(): string
 {
     return $this->getResource()::getUrl('index');
 }
+
 }

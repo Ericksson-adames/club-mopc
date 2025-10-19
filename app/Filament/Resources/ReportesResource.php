@@ -17,9 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ReportesResource extends Resource
 {
     protected static ?string $model = reservas::class;
-
-    protected static ?string $navigationLabel = 'Reportes de Reservas';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Gestión';
+    protected static ?int $navigationShort = 4;
+    protected static ?string $navigationLabel = 'Reportes';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     public static function form(Form $form): Form
     {

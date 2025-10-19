@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PagosResource extends Resource
 {
     protected static ?string $model = Pagos::class;
+     protected static ?string $navigationGroup = 'Comercio';
+     protected static ?int $navigationShort = 2;
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 

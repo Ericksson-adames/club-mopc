@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ReservasResource extends Resource
 {
     protected static ?string $model = Reservas::class;
+     protected static ?string $navigationGroup = 'Comercio';
+     protected static ?int $navigationShort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
       // funcion para organizar de forma desendente el registro de un nuevo usuario

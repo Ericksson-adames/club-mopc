@@ -19,6 +19,9 @@ class UsuarioResource extends Resource
 {
     protected static ?string $model = Usuario::class;
 
+    protected static ?string $navigationGroup = 'Gestión';
+    protected static ?int $navigationShort = 5;
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     // funcion para organizar de forma desendente el registro de un nuevo usuario

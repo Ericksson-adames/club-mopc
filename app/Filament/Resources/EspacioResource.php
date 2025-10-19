@@ -21,6 +21,11 @@ class EspacioResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
+    protected static ?string $navigationGroup = 'Gestión';
+
+    protected static ?int $navigationShort = 3;
+
+
     public static function form(Form $form): Form
     {
         return $form
