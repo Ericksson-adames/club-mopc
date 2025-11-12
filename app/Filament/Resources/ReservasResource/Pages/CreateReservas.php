@@ -157,6 +157,7 @@ Mail::to($destinatario)
     //xdebug_break();
 
     $reserva = $this->record->loadMissing(['horario','espacio']);
+    $reservaId = $this->record->id;
 
     $recipient = Filament::auth()->user();
     if (! $recipient) {
@@ -184,7 +185,7 @@ Mail::to($destinatario)
         ->actions([
             Action::make('view')
                 ->label('Ver reservas')
-                ->url(ReservasResource::getUrl('index'), shouldOpenInNewTab: true),
+               ->url(ReservasResource::getUrl('edit', [$reservaId])),
         ]);
     
     // Obtener el array de datos formateado
