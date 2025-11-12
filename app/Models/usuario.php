@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
 // clase para indicar que este sera mi usuario de autenticacion
 class usuario extends Authenticatable implements FilamentUser
@@ -71,4 +72,29 @@ class usuario extends Authenticatable implements FilamentUser
     public function historia_reservas(){
         return $this->hasMany(historial_reservas::class, 'id_usuario');
     }
+     // ===== RELACIÓN CON NOTIFICACIONES (IMPORTANTE) =====
+    
+    /**
+     * Relación polimórfica con notificaciones de Laravel
+     * Esta es necesaria para que funcione ->notifications()
+     */
+    public function notifications()
+    {
+        return $this->morphMany(
+            \Illuminate\Notifications\DatabaseNotification::class,
+            'notifiable'
+        )->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Obtener solo notificaciones no leídas
+     */
+    public function unreadNotifications()
+    {
+        return $this->morphMany(
+            \Illuminate\Notifications\DatabaseNotification::class,
+            'notifiable'
+        )->whereNull('read_at')->orderBy('created_at', 'desc');
+    }
+
 }

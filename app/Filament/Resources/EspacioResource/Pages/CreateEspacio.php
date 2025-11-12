@@ -12,14 +12,14 @@ class CreateEspacio extends CreateRecord
 {
     protected static string $resource = EspacioResource::class;
 
-    protected function afterCreate(): void
+   /* protected function afterCreate(): void
     {
 
 Notification::make()
     ->title('Hola')
     ->body('Notificación desde Filament')
     ->sendToDatabase( Filament::auth()->user());
-}
+}*/
 
     protected function getRedirectUrl(): string
     {

@@ -58,7 +58,7 @@
             <tr><th>Horario</th><td>{{ $reserva->horario->hora_inicio }} - {{ $reserva->horario->hora_finalizar }}</td></tr>
             <tr><th>Tipo de actividad</th><td>{{ $reserva->tipo_actividad }}</td></tr>
             <tr><th>Número de invitados</th><td>{{ $reserva->numero_invitado }}</td></tr>
-            <!-- tr><th>Estado</th><td>{{ ucfirst($reserva->estado) }}</td></tr -->
+           {{-- <tr><th>Estado</th><td>{{ ucfirst($reserva->estado) }}</td></tr> --}}
             <tr><th>Codigo de pago</th><td>{{ $reserva->codigo_pago }}</td></tr>
             <tr><th>ID de reserva</th><td>{{ $reserva->prefijo }}</td></tr>
             

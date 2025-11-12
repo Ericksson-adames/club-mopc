@@ -28,9 +28,14 @@
                 <li><strong>Tipo de actividad:</strong> {{ $reserva->tipo_actividad }}</li>
                 <li><strong>Número de invitados:</strong> {{ $reserva->numero_invitado }}</li>
                 <li><strong>Estado:</strong> 
-                    <x-filament::badge color="{{ $reserva->estado === 'pendiente' ? 'warning' : ($reserva->estado === 'aprobado' ? 'success' : 'danger') }}">
-                        {{ ucfirst($reserva->estado) }}
-                    </x-filament::badge>
+                   <x-filament::badge
+    :color="$reserva->estado === 'pendiente'
+        ? 'warning'
+        : ($reserva->estado === 'aprobado' ? 'success' : 'danger')"
+>
+    {{ ucfirst($reserva->estado) }}
+</x-filament::badge>
+
                 </li>
             </ul>
         </x-filament::section>

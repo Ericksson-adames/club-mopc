@@ -11,11 +11,13 @@ use App\Models\horario;
 use App\Models\reservas;
 use App\Models\solicitante;
 use App\Models\User;
+use App\Models\usuario;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Actions;
+use Filament\Notifications\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
@@ -24,6 +26,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 
 class CreateReservas extends CreateRecord
 {
@@ -167,21 +171,71 @@ Mail::to($destinatario)
     // 1) Toast en pantalla (para ti)
     Notification::make()
         ->title('Reserva creada')
-        ->body("Nueva **reserva pendiente** para **{$fecha}** en **{$espacio}**.")
+        ->body("Nueva reserva pendiente para {$fecha} en {$espacio}.")
         ->success()
         ->send();
 
     //2) Guardar en BD (campanita)
-    try {
+   try {
+    $filamentNotification = Notification::make()
+        ->title('Reserva creada')
+        ->body("Nueva reserva pendiente para {$fecha} en {$espacio}.")
+        ->success()
+        ->actions([
+            Action::make('view')
+                ->label('Ver reservas')
+                ->url(ReservasResource::getUrl('index'), shouldOpenInNewTab: true),
+        ]);
+    
+    // Obtener el array de datos formateado
+    $data = $filamentNotification->getDatabaseMessage();
+    
+    DB::table('notifications')->insert([
+        'id' => Str::uuid()->toString(),
+        'type' => 'Filament\Notifications\DatabaseNotification',
+        'notifiable_type' => get_class($recipient),
+        'notifiable_id' => $recipient->id,
+        'data' => json_encode($data),
+        'read_at' => null,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    
+    Log::info('Notificación guardada correctamente');
+    
+} catch (\Throwable $e) {
+    Log::error('Error al guardar notificación', ['error' => $e->getMessage()]);
+}
+    /*try {
         Notification::make()
             ->title('Reserva creada')
-            ->body("Nueva **reserva pendiente** para **{$fecha}** en **{$espacio}**.")
+            ->body("Nueva reserva pendiente para {$fecha} en {$espacio}.")
             ->success()
+            ->actions([
+           Action::make('view')
+           ->label('Ver reservas')
+            ->url(ReservasResource::getUrl('index'), shouldOpenInNewTab: true),
+         ])
             ->sendToDatabase($recipient);
     } catch (\Throwable $e) {
         Log::error('Notif BD: fallo al guardar', ['e' => $e->getMessage()]);
-    }
+    }*/
 }
+
+/*protected function afterCreate(): void
+{
+    $u = usuario::find(3);
+
+info('Antes Filament', ['count' => DB::table('notifications')->count()]);
+
+Notification::make()
+    ->title('Reserva creada')
+    ->body('Prueba sendToDatabase')
+    ->success()
+    ->sendToDatabase($u);
+
+info('Después Filament', ['count' => DB::table('notifications')->count()]);
+}*/
 
 protected function getRedirectUrl(): string
 {
