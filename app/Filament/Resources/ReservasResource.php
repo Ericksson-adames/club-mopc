@@ -46,7 +46,7 @@ class ReservasResource extends Resource
             ->schema([
                 Card::make('Espacio a reservar')->schema([
                 Select::make('espacio')
-                ->relationship('espacio', 'nombre')
+                ->relationship('espacio', 'nombre', fn($query) => $query->where('estado', 'activo'))
                 ->required()
                 ]),
             

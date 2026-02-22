@@ -66,7 +66,7 @@
                 <!--li><strong>Fecha de emisión:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y') }}</li-->
             </ul>
         </x-filament::section>
-        {{--  
+          
         <x-filament::section heading="Condiciones y Recomendaciones">
             <x-slot name="header">
                 <h2 class="text-xl font-bold">Condiciones y Recomendaciones</h2>
@@ -82,7 +82,7 @@
                 <li>Coordinar alimentos y bebidas con la Sra. María José al <strong>809-977-2810</strong>.</li>
             </ul>
         </x-filament::section>
-        --}}
+        
 
     </div>
 </x-filament::page>
