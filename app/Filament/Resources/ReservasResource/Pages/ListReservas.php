@@ -23,7 +23,7 @@ class ListReservas extends ListRecords
     {
         return [
             null => Tab::make('Todos'),
-            'aprobada'=>Tab::make('aprobadas')->query(fn ($query) => $query->where('estado', 'aprobado')),
+            'aprobada'=>Tab::make('Aprobadas')->query(fn ($query) => $query->where('estado', 'aprobado')),
             'pendientes'=>Tab::make('Pendientes')->query(fn ($query) => $query->where('estado', 'pendiente')),
             'canceladas'=>Tab::make('Canceladas')->query(fn ($query) => $query->where('estado', 'cancelado')),
             'rechazadas'=>Tab::make('Rechazadas')->query(fn ($query) => $query->where('estado', 'rechazado')),

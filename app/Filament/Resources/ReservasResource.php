@@ -49,23 +49,23 @@ class ReservasResource extends Resource
                             Select::make('espacio')
                                 ->relationship('espacio', 'nombre')
                                 ->required()
-                                ->live()
+                                ->live(),
                         ]),
 
                         Card::make(' Estado de reservar')->visibleOn('edit')
                             ->schema([
                                 Select::make('estado')
                                     ->options([
-                                        //'pendiente' => 'Pendiente',
-                                        //'aprobado' => 'Aprobado',
+                                        // 'pendiente' => 'Pendiente',
+                                        // 'aprobado' => 'Aprobado',
                                         'rechazado' => 'Rechazado',
                                         'cancelado' => 'Cancelado',
                                     ])
                                     ->label('Estado')
                                     ->visibleOn('edit')
-                                    ->required()
+                                    ->required(),
                             ]),
-                    ])->visible(fn() => true),
+                    ])->visible(fn () => true),
 
                 // Paso 2: Solicitante
                 Step::make('Solicitante')
@@ -143,7 +143,7 @@ class ReservasResource extends Resource
                                 ->label('Extension'),
                         ])
                             ->columns(2)
-                            ->visible(fn($get) => $get('tiene_empresa') === 'si'),
+                            ->visible(fn ($get) => $get('tiene_empresa') === 'si'),
 
                         Card::make('Invitados')->schema([
                             TextInput::make('numero_invitado')
@@ -157,66 +157,71 @@ class ReservasResource extends Resource
                                 ->required(),
                         ])
                             ->columns(2),
-                    ])->visible(fn() => true),
+                    ])->visible(fn () => true),
 
                 // Paso 3: Horario
                 Step::make('Horario')
-                ->live()
+                    ->live()
                     ->schema([
                         Card::make()->schema([
                             DatePicker::make('fecha')
                                 ->required()
-                                  ->disabledDates(function (callable $get) {
+                                ->displayFormat('Y-m-d')
+                                ->native(false)
+                                ->disabledDates(function (callable $get) {
 
-                    $espacioId = $get('espacio');
+                                    $espacioId = $get('espacio');
 
-                    if (! $espacioId) {
-                        return [];
-                    }
+                                    if (! $espacioId) {
+                                        return [];
+                                    }
 
-                    return reservas::where('id_espacio', $espacioId)
-                        ->with('horario:id,fecha')
-                        ->get()
-                        ->pluck('horario.fecha')
-                        ->filter()
-                        ->map(fn ($fecha) => Carbon::parse($fecha)->format('Y-m-d'))
-                        ->unique()
-                        ->values()
-                        ->toArray();
-                })
-                ->helperText(function (callable $get) {
-                    $espacioId = $get('espacio');
+                                    return reservas::where('id_espacio', $espacioId)
+                                        ->with('horario:id,fecha')
+                                        ->get()
+                                        ->pluck('horario.fecha')
+                                        ->filter()
+                                        ->map(fn ($fecha) => Carbon::parse($fecha)->format('Y-m-d'))
+                                        ->unique()
+                                        ->values()
+                                        ->toArray();
+                                })
+                /*->helperText(function (callable $get) {
+                                    $espacioId = $get('espacio');
 
-                    if (! $espacioId) return 'Sin espacio seleccionado';
+                                    if (! $espacioId) return 'Sin espacio seleccionado';
 
-                    $fechas = reservas::where('id_espacio', $espacioId)
-                        ->with('horario:id,fecha')
-                        ->get()
-                        ->pluck('horario.fecha')
-                        ->unique()
-                        ->implode(', ');
+                                    $fechas = reservas::where('id_espacio', $espacioId)
+                                        ->with('horario:id,fecha')
+                                        ->get()
+                                        ->pluck('horario.fecha')
+                                        ->unique()
+                                        ->implode(', ');
 
-                    return "Bloqueadas: {$fechas}";
-                })
-                ->rules([
-                    function (callable $get) {
-                        return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                    return "Bloqueadas: {$fechas}";
+                                })*/
+                                ->rules([
+                                                    function (callable $get, ?reservas $record) {
+                                                        return function (string $attribute, $value, \Closure $fail) use ($get, $record) {
 
-                            $espacioId = $get('espacio');
+                                                            $espacioId = $get('espacio');
 
-                            if (! $espacioId) return;
+                                                            if (! $espacioId) {
+                                                                return;
+                                                            }
 
-                            $existe = reservas::where('id_espacio', $espacioId)
-                                ->whereHas('horario', fn($q) => $q->where('fecha', $value))
-                                ->exists();
+                                                            $existe = Reservas::where('id_espacio', $espacioId)
+                                                                ->whereHas('horario', fn ($q) => $q->where('fecha', $value))
+                                                                ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
+                                                                ->exists();
 
-                            if ($existe) {
-                                $fail('Ese espacio ya está reservado para esta fecha.');
-                            }
-                        };
-                    },
-                ])
-                                
+                                                            if ($existe) {
+                                                                $fail('Ese espacio ya está reservado para esta fecha.');
+                                                            }
+                                                        };
+                                                    },
+                                                ])
+
                                 ->placeholder('Fecha de la reserva')
                                 ->label('Fecha de la reunion'),
                             TimePicker::make('hora_inicio')
@@ -234,7 +239,7 @@ class ReservasResource extends Resource
                                 ->displayFormat('h:i A')
                                 ->label('Hora de finalizar'),
                         ])->columns(2),
-                    ])->visible(fn() => true),
+                    ])->visible(fn () => true),
 
                 // Paso 4: Adicional
                 Step::make('Adicional')
@@ -242,10 +247,10 @@ class ReservasResource extends Resource
                         Card::make()->schema([
                             Select::make('utilidades')
                                 ->options([
-                                    'sillas' => 'Sillas',
-                                    'mesas' => 'Mesas',
-                                    'ambos' => 'Ambos',
-                                    'ninguno' => 'Ninguno',
+                                                    'sillas' => 'Sillas',
+                                                    'mesas' => 'Mesas',
+                                                    'ambos' => 'Ambos',
+                                                    'ninguno' => 'Ninguno',
                                 ])
                                 ->reactive()
                                 ->live()
@@ -271,7 +276,7 @@ class ReservasResource extends Resource
                                 ->label('Selecionar utilidades'),
                             TextInput::make('sillas')
                                 // hace visible el campo segun la opcion seleccionada en utilidades
-                                ->visible(fn($get) => in_array($get('utilidades'), ['sillas', 'ambos']))
+                                ->visible(fn ($get) => in_array($get('utilidades'), ['sillas', 'ambos']))
                                 ->live()
                                 ->placeholder('Cantidad de sillas')
                                 // funcion para calcular el total de utilidades
@@ -286,7 +291,7 @@ class ReservasResource extends Resource
 
                             TextInput::make('mesas')
                                 // hace visible el campo segun la opcion seleccionada en utilidades
-                                ->visible(fn($get) => in_array($get('utilidades'), ['mesas', 'ambos']))
+                                ->visible(fn ($get) => in_array($get('utilidades'), ['mesas', 'ambos']))
                                 ->live()
                                 ->placeholder('Cantidad de mesas')
                                 // funcion para calcular el total de utilidades
@@ -306,7 +311,7 @@ class ReservasResource extends Resource
                                 ->numeric()
                                 ->label('Total de utilidades'),
                         ])->columns(2),
-                    ])->visible(fn() => true),
+                    ])->visible(fn () => true),
 
                 /* Paso 5: crta
               Step::make('Carta')
@@ -327,37 +332,37 @@ class ReservasResource extends Resource
                 //
                 Tables\Columns\TextColumn::make('prefijo')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->label('ID'),
                 Tables\Columns\TextColumn::make('espacio.nombre')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->label('Espacio'),
                 Tables\Columns\TextColumn::make('usuario.nombre')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->label('Usuario'),
                 Tables\Columns\TextColumn::make('solicitante.nombre')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->label('Solicitante'),
                 Tables\Columns\TextColumn::make('horario.fecha')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->label('Fecha'),
                 Tables\Columns\BadgeColumn::make('estado')
                     ->toggleable()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.view', ['record' => $record]))
                     ->openUrlInNewTab(false)
                     ->searchable()
                     ->colors([
@@ -373,7 +378,7 @@ class ReservasResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->url(fn($record) => route('filament.admin.resources.reservas.edit', ['record' => $record])),
+                    ->url(fn ($record) => route('filament.admin.resources.reservas.edit', ['record' => $record])),
                 // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([

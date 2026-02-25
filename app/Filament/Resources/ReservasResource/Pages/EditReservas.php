@@ -24,10 +24,10 @@ class EditReservas extends EditRecord
         ];
     }*/
 
-    protected function getRedirectUrl(): ?string
+    /*protected function getRedirectUrl(): ?string
     {
         return $this->getResource()::getUrl('index');
-    }
+    }*/
 
     // funcion para precargar los datos de otras tablas 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -144,7 +144,7 @@ protected function handleRecordUpdate(Model $record, array $data): Model
     // Si el estado actual tiene un correo asociado
     if (array_key_exists($record->estado, $mailables)) {
         try {
-            $reserva = Reservas::with(['solicitante', 'horario', 'adicional', 'espacio'])
+            $reserva = reservas::with(['solicitante', 'horario', 'adicional', 'espacio'])
                 ->findOrFail($record->id);
 
             $correo = data_get($reserva, 'solicitante.correo');
@@ -166,6 +166,11 @@ protected function handleRecordUpdate(Model $record, array $data): Model
     }
 
     return $record;
+}
+
+protected function getRedirectUrl(): string
+{
+    return $this->getResource()::getUrl('index');
 }
 
 
