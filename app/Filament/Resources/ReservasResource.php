@@ -40,29 +40,29 @@ class ReservasResource extends Resource
         return $form->schema([
             Wizard::make([
 
-                // Paso 1: Espacio
-                Step::make('Espacio')
-                    ->schema([
-                        Card::make('Espacio a reservar')->schema([
-                            Select::make('espacio')
-                                ->relationship('espacio', 'nombre', fn ($query) => $query->where('estado', 'activo'))
-                                ->required(),
-                        ]),
-
-                        Card::make(' Estado de reservar')->visibleOn('edit')
-                            ->schema([
-                                Select::make('estado')
-                                    ->options([
-                                        // 'pendiente' => 'Pendiente',
-                                        // 'aprobado' => 'Aprobado',
-                                        'rechazado' => 'Rechazado',
-                                        'cancelado' => 'Cancelado',
-                                    ])
-                                    ->label('Estado')
-                                    ->visibleOn('edit')
-                                    ->required(),
-                            ]),
-                    ])->visible(fn () => true),
+            // Paso 1: Espacio
+            Step::make('Espacio')
+            ->schema([
+                Card::make('Espacio a reservar')->schema([
+                Select::make('espacio')
+                ->relationship('espacio', 'nombre')
+                ->required()
+                ]),
+            
+        Card::make(' Estado de reservar')->visibleOn('edit')
+        ->schema([
+            Select::make('estado')
+            ->options([
+                //'pendiente' => 'Pendiente',
+                //'aprobado' => 'Aprobado',
+                'rechazado' => 'Rechazado',
+                'cancelado' => 'Cancelado',
+            ])
+            ->label('Estado')
+            ->visibleOn('edit')
+            ->required()
+        ]),
+        ])->visible(fn ()=>true),
 
                 // Paso 2: Solicitante
                 Step::make('Solicitante')
