@@ -18,8 +18,13 @@ class horario extends Model
     ];
 
     //relacion con la tabla reservas
- public function reservas(){
+ /*public function reservas(){
     return $this->hasMany(Reservas::class, 'id_horario');
+}*/
+//prueba
+public function reserva()
+{
+    return $this->hasOne(reservas::class, 'id_horario');
 }
 
 }
