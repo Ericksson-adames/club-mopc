@@ -179,6 +179,7 @@ class ReservasResource extends Resource
                                     return reservas::where('id_espacio', $espacioId)
                                         ->with('horario:id,fecha')
                                         ->get()
+                                        ->whereIn('estado', ['pendiente', 'aprobado']) // Solo considerar reservas activas
                                         ->pluck('horario.fecha')
                                         ->filter()
                                         ->map(fn ($fecha) => Carbon::parse($fecha)->format('Y-m-d'))
@@ -210,8 +211,9 @@ class ReservasResource extends Resource
                                                                 return;
                                                             }
 
-                                                            $existe = Reservas::where('id_espacio', $espacioId)
-                                                                ->whereHas('horario', fn ($q) => $q->where('fecha', $value))
+                                                            $existe = reservas::where('id_espacio', $espacioId)
+                                                            ->whereIn('estado', ['pendiente', 'aprobado']) // Solo considerar reservas activas
+                                                                ->whereHas('horario', fn ($q) => $q->whereDate('fecha', $value))
                                                                 ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
                                                                 ->exists();
 
