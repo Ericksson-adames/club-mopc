@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\App;
+use App\Filament\Resources\CustomerResource\Widgets\pagoWidget;
 
 class ListPagos extends ListRecords
 { 
@@ -23,7 +24,7 @@ class ListPagos extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            \App\Filament\Widgets\pagoWidget::class,
+            pagoWidget::class,
         ];
     }
 

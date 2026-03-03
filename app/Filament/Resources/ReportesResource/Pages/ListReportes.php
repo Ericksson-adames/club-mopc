@@ -7,6 +7,9 @@ use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords\Tab;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\CustomerResource\Widgets\reservasWidget;
+use App\Filament\Resources\CustomerResource\Widgets\graficoWigets;
+use App\Filament\Resources\CustomerResource\Widgets\clienteWigets;
 
 class ListReportes extends ListRecords
 {
@@ -25,9 +28,9 @@ class ListReportes extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            \App\Filament\Widgets\reservasWidget::class,
-            \App\Filament\Widgets\graficoWigets::class,
-            \App\Filament\Widgets\clienteWigets::class,
+            reservasWidget::class,
+            graficoWigets::class,
+            clienteWigets::class,
         ];
     }
 
